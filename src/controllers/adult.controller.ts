@@ -26,7 +26,7 @@ export class AdultController {
     public adultRepository : AdultRepository,
   ) {}
 
-  @post('/parents')
+/*  @post('/parents')
   @response(200, {
     description: 'Adult model instance',
     content: {'application/json': {schema: getModelSchemaRef(Adult)}},
@@ -45,7 +45,7 @@ export class AdultController {
     adult: Omit<Adult, 'id'>,
   ): Promise<Adult> {
     return this.adultRepository.create(adult);
-  }
+  }*/
 
   @get('/parents/count')
   @response(200, {
@@ -76,7 +76,7 @@ export class AdultController {
     return this.adultRepository.find(filter);
   }
 
-  @patch('/parents')
+/*  @patch('/parents')
   @response(200, {
     description: 'Adult PATCH success count',
     content: {'application/json': {schema: CountSchema}},
@@ -93,7 +93,7 @@ export class AdultController {
     @param.where(Adult) where?: Where<Adult>,
   ): Promise<Count> {
     return this.adultRepository.updateAll(adult, where);
-  }
+  }*/
 
   @get('/parents/{id}')
   @response(200, {
@@ -111,7 +111,7 @@ export class AdultController {
     return this.adultRepository.findById(id, filter);
   }
 
-  @patch('/parents/{id}')
+/*  @patch('/parents/{id}')
   @response(204, {
     description: 'Adult PATCH success',
   })
@@ -146,5 +146,5 @@ export class AdultController {
   })
   async deleteById(@param.path.number('id') id: number): Promise<void> {
     await this.adultRepository.deleteById(id);
-  }
+  }*/
 }
