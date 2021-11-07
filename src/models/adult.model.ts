@@ -69,12 +69,6 @@ export class Adult extends Entity {
   })
   published?: number;
 
-  @property({
-    type: 'string',
-    length: 65535,
-    mysql: {columnName: 'url', dataType: 'text', dataLength: 65535, dataPrecision: null, dataScale: null, nullable: 'Y'},
-  })
-  url?: string;
 
   @property({
     type: 'string',
