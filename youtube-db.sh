@@ -48,11 +48,18 @@ DOYES="0"
 HASSEARCH="0"
 HASFILE="0"
 
+  dbUser="adult_user"
+  dbPass="psw_adult_user"
+  dbName="video"
+  dbTable="adult"
+
 helpmsg="""
 RIPYT(1) (written by Denis Sunegin)\n\n
 ABOUT:\n
 This program is a wrapper for youtube-dl\n
 \n
+\t-t,--table \"dbTable\"\n
+\t\t will put result to dbTable (default = adult).\n
 \n
 \t-s,--search \"some string\"\n
 \t\t will search for the string you enter.\n
@@ -64,6 +71,11 @@ This program is a wrapper for youtube-dl\n
 \n
 \t-h,--help\n
 \t\t view this help page.\n
+\n
+\n
+\tExample:
+\tyoutube-db.sh --table cartoon --search b7GTyBvniVQ
+\t/youtube-db.sh --table adult --search DtuJ55tmjps
 """
 
 ###### NOT ENOUGH ARGS #######
@@ -144,13 +156,8 @@ function returnlink() {
 }
 
 function ripvideo {
-
-
-  dbUser="adult_user"
-  dbPass="psw_adult_user"
-  dbName="video"
-  #youtube-dl -q --output="%(title)s.%(ext)s" --extract-audio --audio-format=mp3 $1 | pv -t
-  sql='INSERT INTO adult (`title`, `alias`, `video`, `image`,`ru`) VALUES ('"'${videotitle}'"','"'${1}'"','"'${1}'"','"'${thumbhref}'"',"1")'
+  echo -e "Pushing video to DATABASE video.${dbTable}:\n${video} : ${videotitle}"
+  sql='INSERT INTO '${dbTable}' (`title`, `alias`, `video`, `image`,`ru`,`en`) VALUES ('"'${videotitle}'"','"'${1}'"','"'${1}'"','"'${thumbhref}'"',"1","1")'
   mysql -u$dbUser -p$dbPass  -D$dbName  -P3306 -h127.0.0.1 --default_character_set utf8 -A -e "${sql}"
   printf "\x1b[38;5;2mDone\x1b[m\n"
 }
@@ -178,7 +185,7 @@ done
 
 ####### PARSE OPTIONS ########
 
-TEMP=`$GETOPT -o hiys:f: --long help,interactive,yes,search:,file: \
+TEMP=`$GETOPT -o hiys:f: --long help,interactive,yes,table:,search:,file: \
      -n $0 -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -191,6 +198,14 @@ while true ; do
         -h|--help)
             SHOWHELP="1"
             shift
+            ;;
+          -t|--table)
+            if [ "$2" = "" ] ; then
+              echo "Default: dbTable = adult"
+              exit 1
+            fi
+            dbTable="$2"
+            shift 2
             ;;
         -s|--search)
             HASSEARCH="1"
@@ -277,7 +292,6 @@ if [ $HASSEARCH -eq 1 ] ; then
   #generate slink with returnlink function
   returnlink $SEARCHSTRING
 
-  echo "Pushing video to DATABASE: ${video} : ${videotitle}"
   #videoalias=$( echo $videotitle | sed -e "y/абвгдезийклмнопрстуфхьы/abvgdezijklmnoprstufx/" -e "s/ъ|ь|ы//g;s/ж/zh/g;s/ш/sh/g;s/ч/ch/g;s/щ/shh/g;s/ю/yu/g;s/я/ya/g;s/э/eh/g" )
   #echo $videoalias
   #exit
