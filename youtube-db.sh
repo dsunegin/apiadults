@@ -53,6 +53,19 @@ HASFILE="0"
   dbName="video"
   dbTable="adult"
 
+  ru="0"
+  uk="0"
+  be="0"
+  pl="0"
+  en="0"
+  fr="0"
+  de="0"
+  es="0"
+  it="0"
+  bg="0"
+
+
+
 helpmsg="""
 RIPYT(1) (written by Denis Sunegin)\n\n
 ABOUT:\n
@@ -74,8 +87,9 @@ This program is a wrapper for youtube-dl\n
 \n
 \n
 \tExample:
-\tyoutube-db.sh --table cartoon --search b7GTyBvniVQ
-\t/youtube-db.sh --table adult --search DtuJ55tmjps
+\tyoutube-db.sh --ru --table cartoon --search b7GTyBvniVQ
+\t/youtube-db.sh --en --ru --table adult --search DtuJ55tmjps
+\t/youtube-db.sh  --ru --uk --be --pl --en --fr --de --es --it --bg --table adult --search DtuJ55tmjps
 """
 
 ###### NOT ENOUGH ARGS #######
@@ -157,7 +171,8 @@ function returnlink() {
 
 function ripvideo {
   echo -e "Pushing video to DATABASE video.${dbTable}:\n${video} : ${videotitle}"
-  sql='INSERT INTO '${dbTable}' (`title`, `alias`, `video`, `image`,`ru`,`en`) VALUES ('"'${videotitle}'"','"'${1}'"','"'${1}'"','"'${thumbhref}'"',"1","1")'
+  sql='INSERT INTO '${dbTable}' (`title`, `alias`, `video`, `image`,`ru`,`uk`,`be`,`pl`,`en`,`fr`,`de`,`es`,`it`,`bg`) VALUES ('"'${videotitle}'"','"'${1}'"','"'${1}'"','"'${thumbhref}'"',
+  '"'${ru}'"','"'${uk}'"','"'${be}'"','"'${pl}'"','"'${en}'"','"'${fr}'"','"'${de}'"','"'${es}'"','"'${it}'"','"'${bg}'"')'
   mysql -u$dbUser -p$dbPass  -D$dbName  -P3306 -h127.0.0.1 --default_character_set utf8 -A -e "${sql}"
   printf "\x1b[38;5;2mDone\x1b[m\n"
 }
@@ -185,7 +200,7 @@ done
 
 ####### PARSE OPTIONS ########
 
-TEMP=`$GETOPT -o hiys:f: --long help,interactive,yes,table:,search:,file: \
+TEMP=`$GETOPT -o hiys:f: --long help,ru,uk,be,pl,en,fr,de,es,it,bg,table:,search:,file: \
      -n $0 -- "$@"`
 
 if [ $? != 0 ] ; then echo "Terminating..." >&2 ; exit 1 ; fi
@@ -199,6 +214,47 @@ while true ; do
             SHOWHELP="1"
             shift
             ;;
+        -ru|--ru)
+            ru="1"
+            shift
+            ;;
+        -uk|--uk)
+            uk="1"
+            shift
+            ;;
+        -be|--be)
+            be="1"
+            shift
+            ;;
+        -pl|--pl)
+            pl="1"
+            shift
+            ;;
+        -en|--en)
+            en="1"
+            shift
+            ;;
+        -fr|--fr)
+            fr="1"
+            shift
+            ;;
+        -de|--de)
+            de="1"
+            shift
+            ;;
+        -es|--es)
+            es="1"
+            shift
+            ;;
+        -it|--it)
+            it="1"
+            shift
+            ;;
+        -bg|--bg)
+            bg="1"
+            shift
+            ;;
+
           -t|--table)
             if [ "$2" = "" ] ; then
               echo "Default: dbTable = adult"
