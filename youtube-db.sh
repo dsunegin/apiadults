@@ -85,6 +85,16 @@ This program is a wrapper for youtube-dl\n
 \t-h,--help\n
 \t\t view this help page.\n
 \n
+\t-ru,--ru  Push tu Russian\n
+\t-uk,--uk  Push tu Ukrainian\n
+\t-be,--be  Push tu Belarus\n
+\t-pl,--pl  Push tu Polski\n
+\t-en,--en  Push tu English\n
+\t-fr,--fr  Push tu French\n
+\t-de,--de  Push tu Deutch\n
+\t-es,--es  Push tu Spanish\n
+\t-it,--it  Push tu Italian\n
+\t-bg,--bg  Push tu Bulgarian\n
 \n
 \tExample:
 \tyoutube-db.sh --ru --table cartoon --search b7GTyBvniVQ
